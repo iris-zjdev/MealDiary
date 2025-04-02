@@ -1,0 +1,16 @@
+<p style="color: green"><%= notice %></p>
+
+<% content_for :title, "Meal posts" %>
+
+<h1>Meal posts</h1>
+
+<div id="meal_posts">
+  <% @meal_posts.each do |meal_post| %>
+    <%= render meal_post %>
+    <p>
+      <%= link_to "Show this meal post", meal_post %>
+    </p>
+  <% end %>
+</div>
+
+<%= link_to "New meal post", new_meal_post_path %>
