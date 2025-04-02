@@ -1,0 +1,32 @@
+<div class="profile-container">
+  <h2>👤 My Profile</h2>
+
+  <p><strong>Username:</strong> <%= @user.username %></p>
+  <p><strong>Email:</strong> <%= @user.email %></p>
+
+  <hr>
+
+  <h3>📝 My Meal Posts</h3>
+  <% if @my_posts.any? %>
+    <ul>
+      <% @my_posts.each do |post| %>
+        <li><%= link_to post.title, meal_post_path(post) %> (<%= post.created_at.strftime("%b %d") %>)</li>
+      <% end %>
+    </ul>
+  <% else %>
+    <p>You haven't posted anything yet.</p>
+  <% end %>
+
+  <hr>
+
+  <h3>📌 My Bookmarks</h3>
+  <% if @bookmarked_posts.any? %>
+    <ul>
+      <% @bookmarked_posts.each do |post| %>
+        <li><%= link_to post.title, meal_post_path(post) %> - by <%= post.user.username %></li>
+      <% end %>
+    </ul>
+  <% else %>
+    <p>You haven't bookmarked any posts yet.</p>
+  <% end %>
+</div>

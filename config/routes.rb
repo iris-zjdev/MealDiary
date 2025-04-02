@@ -1,4 +1,11 @@
 # Rails.application.routes.draw do
+# get "bookmarks/create"
+# get "bookmarks/destroy"
+# get "likes/create"
+# get "likes/destroy"
+# get "sessions/new"
+# get "sessions/create"
+# get "sessions/destroy"
 #   resources :comments
 #   resources :meal_posts
 #   resources :users
@@ -30,4 +37,6 @@ Rails.application.routes.draw do
   get    "login",  to: "sessions#new"
   post   "login",  to: "sessions#create"
   delete "logout", to: "sessions#destroy"
+
+  get "/profile", to: "users#profile", as: "profile"
 end

@@ -1,0 +1,26 @@
+<div class="navbar">
+  <!-- left -->
+  <div class="navbar-left">
+    <% if current_user %>
+      <%= link_to "➕ Post My Meal", new_meal_post_path, class: "nav-link" %>
+    <% else %>
+      <%= link_to "➕ Post My Meal", login_path, class: "nav-link" %>
+    <% end %>
+  </div>
+
+  <!-- title -->
+  <div class="navbar-center">
+    <h1>🍱<%= link_to "MealDiary", root_path, class: "navbar-title" %></h1>
+  </div>
+
+  <!-- right -->
+  <div class="navbar-right">
+    <% if current_user %>
+      <%= link_to "👤 #{current_user.username}", profile_path, class: "nav-link" %>
+      <%= button_to "Log Out", logout_path, method: :delete, class: "nav-logout-button", form: { class: "logout-form" } %>
+    <% else %>
+      <%= link_to "Log In", login_path, class: "nav-link" %>
+      <%= link_to "Sign Up", new_user_path, class: "nav-link" %>
+    <% end %>
+  </div>
+</div>

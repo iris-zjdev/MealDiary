@@ -1,16 +1,24 @@
-<p style="color: green"><%= notice %></p>
+<!-- Feed of meal posts -->
+<h2 class="feed-header">Recent Meal Posts</h2>
 
-<% content_for :title, "Meal posts" %>
+<% @meal_posts.each do |post| %>
+  <div class="meal-card">
+    <% if current_user %>
+      <h3><%= link_to post.title, meal_post_path(post) %></h3>
+    <% else %>
+      <h3><%= post.title %> <span class="meal-meta"></span></h3>
+    <% end %>
 
-<h1>Meal posts</h1>
+    <p><%= truncate(post.content, length: 120) %></p>
 
-<div id="meal_posts">
-  <% @meal_posts.each do |meal_post| %>
-    <%= render meal_post %>
-    <p>
-      <%= link_to "Show this meal post", meal_post %>
+    <p class="meal-meta">
+      <%= post.meal_type.capitalize %> · <%= post.meal_source.capitalize %> · by <%= post.user.username %>
     </p>
-  <% end %>
-</div>
+  </div>
+<% end %>
 
-<%= link_to "New meal post", new_meal_post_path %>
+<% unless current_user %>
+  <div class="guest-prompt">
+    <p><%= link_to "Log in", login_path %> or <%= link_to "Sign up", new_user_path %> to explore full posts and interact with others.</p>
+  </div>
+<% end %>

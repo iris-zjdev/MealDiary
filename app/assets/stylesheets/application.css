@@ -8,3 +8,231 @@
  *
  * Consider organizing styles into separate files for maintainability.
  */
+/* ==== Custom styles for EatDiary === */
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  .navbar-left,
+  .navbar-center,
+  .navbar-right {
+    flex: 1;
+    text-align: center;
+  }
+  
+  .navbar-left {
+    text-align: left;
+  }
+  
+  .navbar-right {
+    text-align: right;
+  }
+  
+  .navbar-title {
+    font-size: 24px;
+    font-weight: bold;
+    text-decoration: none;
+    color: black;
+  }
+  
+  .nav-link {
+    margin-left: 15px;
+    font-weight: bold;
+    color: #0077cc;
+    text-decoration: none;
+  }
+  
+  .nav-link:hover {
+    text-decoration: underline;
+  }
+  
+  
+  .navbar h1 {
+    font-size: 28px;
+    font-weight: bold;
+  }
+  
+  .navbar a {
+    margin-left: 15px;
+    text-decoration: none;
+  }
+  
+  .feed-header {
+    font-size: 20px;
+    margin-bottom: 10px;
+  }
+  
+  .meal-card {
+    border: 1px solid #ddd;
+    padding: 15px;
+    margin-bottom: 15px;
+    border-radius: 5px;
+    background-color: #fdfdfd;
+  }
+  
+  .meal-card h3 {
+    margin: 0 0 5px 0;
+  }
+  
+  .meal-meta {
+    color: #666;
+    font-size: 0.9em;
+  }
+  
+  .guest-prompt {
+    margin-top: 30px;
+    text-align: center;
+    font-weight: bold;
+  }
+
+  /* ==== Sessions login page ==== */
+
+.form-container {
+    max-width: 400px;
+    margin: 60px auto;
+    padding: 30px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    background-color: #f9f9f9;
+    text-align: center;
+  }
+  
+  .form-field {
+    margin-bottom: 20px;
+    text-align: left;
+  }
+  
+  .form-field label {
+    font-weight: bold;
+  }
+  
+  .form-field input {
+    width: 100%;
+    padding: 8px;
+    box-sizing: border-box;
+  }
+  
+  .form-actions input {
+    padding: 10px 20px;
+    font-weight: bold;
+    background-color: #0077cc;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .form-actions input:hover {
+    background-color: #005fa3;
+  }
+  
+  .footer-link {
+    color: #0077cc;
+    text-decoration: none;
+    font-weight: bold;
+  }
+  
+  .footer-link:hover {
+    text-decoration: underline;
+  }
+  .logout-form {
+    display: inline;
+  }
+  
+  .nav-logout-button {
+    background: none;
+    border: none;
+    color: #0077cc;
+    font-weight: bold;
+    cursor: pointer;
+    text-decoration: none;
+    padding: 0;
+    font-size: 1em;
+  }
+  
+  .nav-logout-button:hover {
+    text-decoration: underline;
+    color: #005fa3;
+  }
+   
+  .form-container {
+    max-width: 500px;
+    margin: 60px auto;
+    padding: 30px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    background-color: #f9f9f9;
+    text-align: center;
+  }
+  
+  .form-field {
+    margin-bottom: 20px;
+    text-align: left;
+  }
+  
+  .form-field input,
+  .form-field textarea,
+  .form-field select {
+    width: 100%;
+    padding: 8px;
+    box-sizing: border-box;
+  }
+  
+  .form-actions input[type="submit"] {
+    padding: 10px 20px;
+    font-weight: bold;
+    background-color: #0077cc;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .form-actions input:hover {
+    background-color: #005fa3;
+  }
+  
+  .back-button {
+    display: inline-block;
+    margin-top: 20px;
+    color: #0077cc;
+    font-weight: bold;
+    text-decoration: none;
+  }
+  
+  .back-button:hover {
+    text-decoration: underline;
+  }
+     
+  .profile-container {
+    max-width: 600px;
+    margin: 40px auto;
+    padding: 25px;
+    border: 1px solid #ddd;
+    background-color: #fff;
+    border-radius: 6px;
+  }
+  
+  .profile-container h2 {
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  
+  .profile-container h3 {
+    margin-top: 30px;
+    margin-bottom: 10px;
+  }
+  
+  .profile-container ul {
+    padding-left: 20px;
+  }
+  
+  .profile-container li {
+    margin-bottom: 6px;
+  }
+    
+  

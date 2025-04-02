@@ -1,11 +1,8 @@
-<% content_for :title, "New meal post" %>
+<div class="form-container">
+  <h2>New Meal Post</h2>
 
-<h1>New meal post</h1>
+  <%= render "form", meal_post: @meal_post %>
 
-<%= render "form", meal_post: @meal_post %>
-
-<br>
-
-<div>
-  <%= link_to "Back to meal posts", meal_posts_path %>
+  <%= link_to "← Back to All Posts", meal_posts_path, class: "back-button" %>
 </div>
+

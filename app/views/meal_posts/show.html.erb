@@ -1,10 +1,45 @@
-<p style="color: green"><%= notice %></p>
+<h2><%= @meal_post.title %></h2>
 
-<%= render @meal_post %>
+<p><strong>Posted by:</strong> <%= @meal_post.user.username %></p>
+<p><strong>Meal Type:</strong> <%= @meal_post.meal_type %></p>
+<p><strong>Source:</strong> <%= @meal_post.meal_source %></p>
+<p><%= @meal_post.content %></p>
 
-<div>
-  <%= link_to "Edit this meal post", edit_meal_post_path(@meal_post) %> |
-  <%= link_to "Back to meal posts", meal_posts_path %>
+<% if @meal_post.image.attached? %>
+  <%= image_tag @meal_post.image, width: 400 %>
+<% end %>
 
-  <%= button_to "Destroy this meal post", @meal_post, method: :delete %>
-</div>
+<hr>
+<h4>Comments</h4>
+<% @meal_post.comments.each do |comment| %>
+  <div>
+    <strong><%= comment.user.username %>:</strong> <%= comment.content %>
+  </div>
+<% end %>
+
+<% if current_user %>
+  <%= form_with model: [@meal_post, Comment.new], local: true do |form| %>
+    <p><%= form.text_area :content, rows: 3, placeholder: "Write a comment..." %></p>
+    <%= form.submit "Comment" %>
+  <% end %>
+<% else %>
+  <p><%= link_to "Log in", login_path %> to comment.</p>
+<% end %>
+
+<% if current_user %>
+  <!-- Like Button -->
+  <% if @meal_post.likes.exists?(user_id: current_user.id) %>
+    <%= button_to '💔 Unlike', like_path(meal_post_id: @meal_post.id), method: :delete, form: { style: "display:inline" } %>
+  <% else %>
+    <%= button_to '👍 Like', likes_path(meal_post_id: @meal_post.id), method: :post, form: { style: "display:inline" } %>
+  <% end %>
+
+  <!-- Bookmark Button -->
+  <% if @meal_post.bookmarks.exists?(user_id: current_user.id) %>
+    <%= button_to '🔖 Unbookmark', bookmark_path(meal_post_id: @meal_post.id), method: :delete, form: { style: "display:inline" } %>
+  <% else %>
+    <%= button_to '📌 Bookmark', bookmarks_path(meal_post_id: @meal_post.id), method: :post, form: { style: "display:inline" } %>
+  <% end %>
+<% else %>
+  <p><%= link_to "Log in", login_path %> to like or bookmark this post.</p>
+<% end %>

@@ -1,6 +1,7 @@
 class UsersController < ApplicationController
   before_action :set_user, only: %i[ show edit update destroy ]
 
+
   # GET /users or /users.json
   def index
     @users = User.all
@@ -21,11 +22,16 @@ class UsersController < ApplicationController
 
   # POST /users or /users.json
   def create
+    if User.exists?(email: params[:user][:email])
+      redirect_to new_user_path(error: "email_taken") and return
+    end
+
     @user = User.new(user_params)
 
     respond_to do |format|
       if @user.save
-        format.html { redirect_to @user, notice: "User was successfully created." }
+        session[:user_id] = @user.id
+        format.html { redirect_to root_path, notice: "Account created successfully." }
         format.json { render :show, status: :created, location: @user }
       else
         format.html { render :new, status: :unprocessable_entity }
@@ -33,6 +39,7 @@ class UsersController < ApplicationController
       end
     end
   end
+
 
   # PATCH/PUT /users/1 or /users/1.json
   def update
@@ -57,6 +64,7 @@ class UsersController < ApplicationController
     end
   end
 
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_user
@@ -64,7 +72,16 @@ class UsersController < ApplicationController
     end
 
     # Only allow a list of trusted parameters through.
+    # def user_params
+    #   params.expect(user: [ :username, :email, :password_digest, :is_admin ])
+    # end
     def user_params
-      params.expect(user: [ :username, :email, :password_digest, :is_admin ])
+      params.require(:user).permit(:username, :email, :password, :password_confirmation)
+    end
+
+    def profile
+      @user = User.find(params.expect(:id))
+      @my_posts = @user.meal_posts.order(created_at: :desc)
+      @bookmarked_posts = MealPost.joins(:bookmarks).where(bookmarks: { user_id: @user.id }).order(created_at: :desc)
     end
 end
