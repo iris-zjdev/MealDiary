@@ -1,45 +1,98 @@
-<h2><%= @meal_post.title %></h2>
+<div class="meal-post-container">
+  <div class="meal-post-card-top">
+    <h2 class="meal-post-title"><%= @meal_post.title %></h2>
 
-<p><strong>Posted by:</strong> <%= @meal_post.user.username %></p>
-<p><strong>Meal Type:</strong> <%= @meal_post.meal_type %></p>
-<p><strong>Source:</strong> <%= @meal_post.meal_source %></p>
-<p><%= @meal_post.content %></p>
+    <% if current_user == @meal_post.user %>
+      <div class="card-actions">
+        <%= link_to "Edit", edit_meal_post_path(@meal_post), class: "card-action-link" %>
+        |
+        <a href="#"
+          onclick="if (confirm('Are you sure you want to delete this meal post?')) { document.getElementById('delete-post-form').submit(); } return false;"
+          class="card-action-link">
+          Delete
+        </a>
 
-<% if @meal_post.image.attached? %>
-  <%= image_tag @meal_post.image, width: 400 %>
-<% end %>
-
-<hr>
-<h4>Comments</h4>
-<% @meal_post.comments.each do |comment| %>
-  <div>
-    <strong><%= comment.user.username %>:</strong> <%= comment.content %>
+        <%= form_with url: meal_post_path(@meal_post), method: :delete, id: "delete-post-form", html: { style: "display: none;" } do %>
+        <% end %>
+      </div>
+    <% end %>
   </div>
-<% end %>
 
-<% if current_user %>
-  <%= form_with model: [@meal_post, Comment.new], local: true do |form| %>
-    <p><%= form.text_area :content, rows: 3, placeholder: "Write a comment..." %></p>
-    <%= form.submit "Comment" %>
-  <% end %>
-<% else %>
-  <p><%= link_to "Log in", login_path %> to comment.</p>
-<% end %>
+  <div class="meal-post-meta">
+    <span><strong>Posted by:</strong> <%= @meal_post.user.username %></span>
+    <span><strong>Type:</strong> <%= @meal_post.meal_type.titleize %></span>
+    <span><strong>Source:</strong> <%= @meal_post.meal_source.titleize %></span>
+    <span><strong>Posted on:</strong> <%= @meal_post.created_at.strftime("%b %d, %Y %H:%M") %></span>
+  </div>
 
-<% if current_user %>
-  <!-- Like Button -->
-  <% if @meal_post.likes.exists?(user_id: current_user.id) %>
-    <%= button_to '💔 Unlike', like_path(meal_post_id: @meal_post.id), method: :delete, form: { style: "display:inline" } %>
-  <% else %>
-    <%= button_to '👍 Like', likes_path(meal_post_id: @meal_post.id), method: :post, form: { style: "display:inline" } %>
+  <div class="meal-post-content"><%= simple_format(@meal_post.content) %></div>
+
+  <% if @meal_post.image.attached? %>
+    <div class="meal-post-image">
+      <%= image_tag @meal_post.image, class: "meal-image" %>
+    </div>
   <% end %>
 
-  <!-- Bookmark Button -->
-  <% if @meal_post.bookmarks.exists?(user_id: current_user.id) %>
-    <%= button_to '🔖 Unbookmark', bookmark_path(meal_post_id: @meal_post.id), method: :delete, form: { style: "display:inline" } %>
-  <% else %>
-    <%= button_to '📌 Bookmark', bookmarks_path(meal_post_id: @meal_post.id), method: :post, form: { style: "display:inline" } %>
+  <div class="section-spacer"></div>
+
+  <!-- ❤️ 🤍 ⭐ Buttons -->
+  <div class="meal-post-actions">
+    <% if current_user %>
+      <%= form_with url: toggle_like_meal_post_path(@meal_post), method: :post, local: true do %>
+        <button class="action-button">
+          <% if @meal_post.likes.exists?(user: current_user) %>
+            ❤️ Liked
+          <% else %>
+            🤍 Like
+          <% end %>
+        </button>
+      <% end %>
+
+      <%= form_with url: toggle_bookmark_meal_post_path(@meal_post), method: :post, local: true do %>
+        <button class="action-button">
+          <% if @meal_post.bookmarks.exists?(user: current_user) %>
+            ⭐ Bookmarked
+          <% else %>
+            ☆ Bookmark
+          <% end %>
+        </button>
+      <% end %>
+    <% else %>
+      <p class="login-hint">Log in to like or bookmark this post.</p>
+    <% end %>
+  </div>
+
+  <hr class="section-divider">
+
+  <!-- 💬 评论展示 + 新增 -->
+  <div class="meal-post-comments">
+    <h3>💬 Comments</h3>
+    <% if @meal_post.comments.any? %>
+      <ul class="comment-list">
+        <% @meal_post.comments.each do |comment| %>
+          <li class="comment-item">
+            <div class="comment-meta">
+              <strong class="comment-username"><%= comment.user.username %></strong>
+              <span class="comment-time"><%= comment.created_at.strftime("%b %d, %H:%M") %></span>
+            </div>
+            <div class="comment-body"><%= comment.content %></div>
+          </li>
+        <% end %>
+      </ul>
+    <% else %>
+      <p>No comments yet.</p>
+    <% end %>
+  </div>
+
+  <% if current_user %>
+    <div class="comment-form">
+      <%= form_with model: [@meal_post, Comment.new], local: true do |f| %>
+        <div class="form-field">
+          <%= f.label :content, "Add a comment" %><br>
+          <%= f.text_area :content, rows: 3 %>
+        </div>
+        <%= f.submit "Post Comment", class: "comment-submit-button" %>
+      <% end %>
+    </div>
   <% end %>
-<% else %>
-  <p><%= link_to "Log in", login_path %> to like or bookmark this post.</p>
-<% end %>
+</div>

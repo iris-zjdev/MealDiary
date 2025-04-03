@@ -1,32 +1,52 @@
-<%= form_with model: meal_post, local: true do |form| %>
-  <div class="form-field">
-    <%= form.label :title %><br>
-    <%= form.text_field :title %>
-  </div>
+<div class="form-container">
+  <%= form_with(model: meal_post, local: true, html: { multipart: true }) do |form| %>
+    <% if meal_post.errors.any? %>
+      <div class="form-errors">
+        <h4><%= pluralize(meal_post.errors.count, "error") %> prohibited this post from being saved:</h4>
+        <ul>
+          <% meal_post.errors.full_messages.each do |msg| %>
+            <li><%= msg %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
 
-  <div class="form-field">
-    <%= form.label :content %><br>
-    <%= form.text_area :content %>
-  </div>
+    <div class="form-field">
+      <%= form.label :title %><br>
+      <%= form.text_field :title %>
+    </div>
 
-  <div class="form-field">
-    <%= form.label :meal_type %><br>
-    <%= form.select :meal_type, MealPost.meal_types.keys.map { |t| [t.titleize, t] } %>
-  </div>
+    <div class="form-field">
+      <%= form.label :content %><br>
+      <%= form.text_area :content, rows: 5 %>
+    </div>
 
-  <div class="form-field">
-    <%= form.label :meal_source %><br>
-    <%= form.select :meal_source, MealPost.meal_sources.keys.map { |s| [s.titleize, s] } %>
-  </div>
+    <div class="form-field">
+      <%= form.label :meal_type %><br>
+      <%= form.select :meal_type, MealPost.meal_types.keys.map { |t| [t.titleize, t] } %>
+    </div>
 
-  <div class="form-field">
-    <%= form.label :image %><br>
-    <%= form.file_field :image %>
-  </div>
+    <div class="form-field">
+      <%= form.label :meal_source %><br>
+      <%= form.select :meal_source, MealPost.meal_sources.keys.map { |s| [s.titleize, s] } %>
+    </div>
 
-  <div class="form-actions">
-    <%= form.submit "Post" %>
-  </div>
-<% end %>
+    <div class="form-field">
+      <%= form.label :image %><br>
+      <%= form.file_field :image %>
+    </div>
+
+    <div class="form-actions">
+  <%= form.submit meal_post.persisted? ? "Update Post" : "Create Post", class: "submit-button" %>
+
+  <%= link_to "Cancel", meal_post.persisted? ? meal_post_path(meal_post) : root_path, class: "cancel-button" %>
+</div>
+
+
+
+  <% end %>
+  
+</div>
+
 
 

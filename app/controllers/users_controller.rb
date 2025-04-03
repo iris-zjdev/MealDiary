@@ -1,5 +1,6 @@
 class UsersController < ApplicationController
   before_action :set_user, only: %i[ show edit update destroy ]
+  before_action :require_login, only: [ :profile ]
 
 
   # GET /users or /users.json
@@ -64,6 +65,41 @@ class UsersController < ApplicationController
     end
   end
 
+  def profile
+    # @user = User.find(params.expect(:id))
+    @user = current_user
+    puts "👉 current_user: #{current_user.inspect}"
+    puts "🧪 current_user = #{current_user.inspect}"
+    @my_posts = @user.meal_posts.order(created_at: :desc)
+    @bookmarked_posts = MealPost.joins(:bookmarks).where(bookmarks: { user_id: @user.id }).order(created_at: :desc)
+  end
+
+def edit_password
+  @user = current_user
+end
+
+def update_password
+  @user = current_user
+  if @user.authenticate(params[:user][:current_password])
+    if params[:user][:new_password] == params[:user][:new_password_confirmation]
+      @user.password = params[:user][:new_password]
+      if @user.save
+        redirect_to profile_path, notice: "Password updated successfully."
+      else
+        flash.now[:alert] = "Failed to update password."
+        render :edit_password
+      end
+    else
+      flash.now[:alert] = "New passwords do not match."
+      render :edit_password
+    end
+  else
+    flash.now[:alert] = "Incorrect current password."
+    render :edit_password
+  end
+end
+
+
 
   private
     # Use callbacks to share common setup or constraints between actions.
@@ -77,11 +113,5 @@ class UsersController < ApplicationController
     # end
     def user_params
       params.require(:user).permit(:username, :email, :password, :password_confirmation)
-    end
-
-    def profile
-      @user = User.find(params.expect(:id))
-      @my_posts = @user.meal_posts.order(created_at: :desc)
-      @bookmarked_posts = MealPost.joins(:bookmarks).where(bookmarks: { user_id: @user.id }).order(created_at: :desc)
     end
 end

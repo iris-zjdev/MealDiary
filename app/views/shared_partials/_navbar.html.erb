@@ -10,7 +10,9 @@
 
   <!-- title -->
   <div class="navbar-center">
-    <h1>🍱<%= link_to "MealDiary", root_path, class: "navbar-title" %></h1>
+    <%= link_to root_path do %>
+  <%= image_tag "mealdiary-logo.png", alt: "MealDiary", class: "logo-img" %>
+<% end %>
   </div>
 
   <!-- right -->

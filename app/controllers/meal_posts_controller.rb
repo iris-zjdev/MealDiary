@@ -70,6 +70,7 @@
 # end
 class MealPostsController < ApplicationController
   before_action :require_login, only: [ :show, :new, :create, :edit, :update, :destroy ]
+  before_action :require_owner, only: [ :edit, :update, :destroy ]
 
   def index
     @meal_posts = MealPost.all.order(created_at: :desc)
@@ -115,6 +116,21 @@ class MealPostsController < ApplicationController
     redirect_to meal_posts_url, notice: "Meal post was successfully deleted."
   end
 
+  def toggle_like
+    post = MealPost.find(params[:id])
+    like = post.likes.find_by(user: current_user)
+    like ? like.destroy : post.likes.create(user: current_user)
+    redirect_to post
+  end
+
+  def toggle_bookmark
+    post = MealPost.find(params[:id])
+    bm = post.bookmarks.find_by(user: current_user)
+    bm ? bm.destroy : post.bookmarks.create(user: current_user)
+    redirect_to post
+  end
+
+
   private
 
   def meal_post_params
@@ -124,6 +140,13 @@ class MealPostsController < ApplicationController
   def require_login
     unless current_user
       redirect_to login_path, alert: "Please log in to continue."
+    end
+  end
+
+  def require_owner
+    @meal_post = MealPost.find(params[:id])
+    unless @meal_post.user == current_user
+      redirect_to meal_posts_path, alert: "You are not authorized to perform this action."
     end
   end
 end

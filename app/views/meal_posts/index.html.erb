@@ -1,24 +1,29 @@
-<!-- Feed of meal posts -->
-<h2 class="feed-header">Recent Meal Posts</h2>
+<div class="meal-feed">
+  <% @meal_posts.each do |post| %>
+    <div class="meal-card <%= post.meal_type %>">
+      <% if current_user %>
+        <h3><%= link_to post.title, meal_post_path(post) %></h3>
+      <% else %>
+        <h3><%= post.title %></h3>
+      <% end %>
 
-<% @meal_posts.each do |post| %>
-  <div class="meal-card">
-    <% if current_user %>
-      <h3><%= link_to post.title, meal_post_path(post) %></h3>
-    <% else %>
-      <h3><%= post.title %> <span class="meal-meta"></span></h3>
-    <% end %>
+      <p class="meal-snippet"><%= truncate(post.content, length: 120) %></p>
 
-    <p><%= truncate(post.content, length: 120) %></p>
+      <p class="meal-meta">
+        <%= post.meal_type.capitalize %> ·
+        <%= post.meal_source.capitalize %> ·
+        by <%= post.user.username %> ·
+        <%= post.created_at.strftime("%b %d, %Y") %>
+      </p>
+    </div>
+  <% end %>
 
-    <p class="meal-meta">
-      <%= post.meal_type.capitalize %> · <%= post.meal_source.capitalize %> · by <%= post.user.username %>
-    </p>
-  </div>
-<% end %>
-
-<% unless current_user %>
-  <div class="guest-prompt">
-    <p><%= link_to "Log in", login_path %> or <%= link_to "Sign up", new_user_path %> to explore full posts and interact with others.</p>
-  </div>
-<% end %>
+  <% unless current_user %>
+    <div class="guest-prompt">
+      <p>
+        <%= link_to "Log in", login_path %> or
+        <%= link_to "Sign up", new_user_path %> to post your daily meals and interact with others.
+      </p>
+    </div>
+  <% end %>
+</div>

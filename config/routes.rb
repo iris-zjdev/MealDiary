@@ -39,4 +39,9 @@ Rails.application.routes.draw do
   delete "logout", to: "sessions#destroy"
 
   get "/profile", to: "users#profile", as: "profile"
+
+  get "/profile/edit_password", to: "users#edit_password", as: "edit_password"
+  patch "/profile/update_password", to: "users#update_password", as: "update_password"
+  post "meal_posts/:id/toggle_like", to: "meal_posts#toggle_like", as: "toggle_like_meal_post"
+  post "meal_posts/:id/toggle_bookmark", to: "meal_posts#toggle_bookmark", as: "toggle_bookmark_meal_post"
 end
