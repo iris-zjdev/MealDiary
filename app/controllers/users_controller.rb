@@ -78,24 +78,49 @@ def edit_password
   @user = current_user
 end
 
+# def update_password
+#   @user = current_user
+#   if @user.authenticate(params[:user][:current_password])
+#     if params[:user][:new_password] == params[:user][:new_password_confirmation]
+#       @user.password = params[:user][:new_password]
+#       if @user.save
+#         redirect_to profile_path, notice: "Password updated successfully."
+#       else
+#         flash.now[:alert] = "Failed to update password."
+#         render :edit_password
+#       end
+#     else
+#       flash.now[:alert] = "New passwords do not match."
+#       render :edit_password
+#     end
+#   else
+#     flash.now[:alert] = "Incorrect current password."
+#     render :edit_password
+#   end
+# end
 def update_password
   @user = current_user
-  if @user.authenticate(params[:user][:current_password])
-    if params[:user][:new_password] == params[:user][:new_password_confirmation]
-      @user.password = params[:user][:new_password]
+  current = params[:current_password]
+  new_pw = params[:new_password]
+  confirm = params[:new_password_confirmation]
+
+  if @user.authenticate(current)
+    if new_pw == confirm
+      @user.password = new_pw
       if @user.save
-        redirect_to profile_path, notice: "Password updated successfully."
+        flash[:notice] = "Password updated successfully."
+        redirect_to profile_path
       else
-        flash.now[:alert] = "Failed to update password."
-        render :edit_password
+        flash[:alert] = "Failed to save new password."
+        render :change_password
       end
     else
-      flash.now[:alert] = "New passwords do not match."
-      render :edit_password
+      flash[:alert] = "New password and confirmation do not match."
+      render :change_password
     end
   else
-    flash.now[:alert] = "Incorrect current password."
-    render :edit_password
+    flash[:alert] = "Current password is incorrect."
+    render :change_password
   end
 end
 
